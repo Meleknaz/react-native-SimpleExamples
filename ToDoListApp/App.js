@@ -49,7 +49,7 @@ export default class App extends Component{
                   onChangeText={(text)=>this.setState({text})}
                 />
                 <TouchableOpacity onPress={this.handleSave} style={style.button}>
-                  <Text style={style.title_text}>Ekle</Text>
+                  <Text style={style.title_text}>Add</Text>
                 </TouchableOpacity>
               </View>
               <View>
