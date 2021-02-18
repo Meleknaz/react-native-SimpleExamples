@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React,{Component} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -14,101 +14,59 @@ import {
   View,
   Text,
   StatusBar,
+  TextInput,
+  TouchableOpacity,
+  _View,
 } from 'react-native';
+import ItemList from './ItemList';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+export default class App extends Component{
+  constructor(){
+    super();
+    this.state = {
+        text:'',
+        data:[]
+    }
+  }
 
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
+  handleSave = () =>{
+      const{text, data}=this.state;
+      data.push({text});
+      this.setState({data,text:''});
+      console.log(this.state.data);
+      //if run debug mod you can see data with console.log();
+  };
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
+  render(){
+    const {text,data} = this.state;
+    return(
+      <View style={[{flex:1, paddingTop:30}]}>
+          <View style={style.title}><Text style={style.title_text}>ToDoListApp</Text></View>
+              <View style={{backgroundColor:'#ccc',padding:10,flexDirection:'row'}}>
+                <TextInput
+                  style={style.input}
+                  value={text}
+                  onChangeText={(text)=>this.setState({text})}
+                />
+                <TouchableOpacity onPress={this.handleSave} style={style.button}>
+                  <Text style={style.title_text}>Ekle</Text>
+                </TouchableOpacity>
+              </View>
+              <View>
+                { data.map((item) => {
+                  return <ItemList text={item.text} />
+                })}
+              </View>
+      </View>
+    )
+  }
+}
 
-export default App;
+const style = StyleSheet.create({
+  welcome_area:{ backgroundColor:'pink',flex:1},
+  welcome_text:{color:'white',fontSize:20},
+  title:{backgroundColor:'green',padding:10},
+  title_text:{color:'black',textAlign:'center',fontSize:16,fontWeight:'700'},
+  input:{ padding:10,backgroundColor:'white',flex:1},
+  button:{padding:10,backgroundColor:'green',borderRadius:5,marginLeft:10}
+ });
